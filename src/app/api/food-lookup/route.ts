@@ -55,10 +55,11 @@ Use realistic USDA-style nutritional values. Do not include any markdown, code f
       .slice(0, 5);
 
     return NextResponse.json(validated);
-  } catch (err) {
-    console.error("food-lookup error:", err);
+  } catch (err: unknown) {
+    const message = err instanceof Error ? err.message : String(err);
+    console.error("food-lookup error:", message);
     return NextResponse.json(
-      { error: "Food lookup failed. Check server logs." },
+      { error: `Food lookup failed: ${message}` },
       { status: 500 }
     );
   }

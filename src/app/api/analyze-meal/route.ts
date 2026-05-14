@@ -62,10 +62,11 @@ export async function POST(req: NextRequest) {
     }
 
     return NextResponse.json(parsed);
-  } catch (err) {
-    console.error("analyze-meal error:", err);
+  } catch (err: unknown) {
+    const message = err instanceof Error ? err.message : String(err);
+    console.error("analyze-meal error:", message);
     return NextResponse.json(
-      { error: "Failed to analyze image. Please try again." },
+      { error: `Failed to analyze image: ${message}` },
       { status: 500 }
     );
   }
